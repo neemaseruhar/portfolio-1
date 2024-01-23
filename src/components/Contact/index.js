@@ -1,0 +1,88 @@
+import {useState, useEffect, useRef} from 'react'
+import './index.scss'
+import AnimatedLetters from '../AnimatedLetters';
+import emailjs from '@emailjs/browser';
+
+export const Contact = () => {
+    const [letterClass,setLetterClass] = useState('text-animate');
+    const nameArray = 'Contact Me'.split('');
+    const form = useRef();
+    
+
+    useEffect(() => {
+     setTimeout(() => {
+      setLetterClass('text-animate-hover')
+    }, 3000)
+  }, [])
+
+    const sendEmail = (e) =>{
+      e.preventDefault();
+      emailjs
+      .sendForm('gmail', 'template_YeJhZkgb', form.current, 'your-token')
+      .then(
+        () => {
+          alert('Message successfully sent!')
+          window.location.reload(false)
+        },
+        () => {
+          alert('Failed to send the message, please try again')
+        }
+      )
+
+    }
+
+  return (
+    <>
+        <div className="container contact-page">
+        <div className="text-zone">
+          <h1>
+            <AnimatedLetters
+              letterClass={letterClass}
+              strArray={nameArray}
+              idx={15}
+            />
+          </h1>
+          <p>
+            I am interested in freelance opportunities .I am confident that my skills in js, react, html and css , make me a strong fit for the web developer  role.  However, if you have any other requests or
+            questions, don't hesitate to contact me using below form either.
+          </p>
+          <div className="contact-form">
+            <form ref={form} onSubmit={sendEmail}>
+              <ul>
+                <li className="half">
+                  <input placeholder="Name" type="text" name="name" required />
+                </li>
+                <li className="half">
+                  <input
+                    placeholder="Email"
+                    type="email"
+                    name="email"
+                    required
+                  />
+                </li>
+                <li>
+                  <input
+                    placeholder="Subject"
+                    type="text"
+                    name="subject"
+                    required
+                  />
+                </li>
+                <li>
+                  <textarea
+                    placeholder="Message"
+                    name="message"
+                    required
+                  ></textarea>
+                </li>
+                <li>
+                  <input type="submit" className="flat-button" value="SEND" />
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+        </div>
+    </>
+  )
+}
